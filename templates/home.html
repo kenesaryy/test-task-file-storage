@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная - File Storage Service{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">File Storage Service</h1>
+            <p class="lead">Сервис для безопасного хранения файлов с автоматическим разбиением на части и архивацией.</p>
+            <hr class="my-4">
+            
+            {% if user.is_authenticated %}
+                <p>Добро пожаловать! Вы можете управлять своими файлами через API или веб-интерфейс.</p>
+                <a class="btn btn-primary btn-lg me-2" href="{% url 'profile' %}">Мой профиль</a>
+                <a class="btn btn-secondary btn-lg" href="/admin/">Админ-панель</a>
+            {% else %}
+                <p>Войдите в систему, чтобы начать работу с файлами.</p>
+                <a class="btn btn-primary btn-lg" href="/api-auth/login/">Войти</a>
+            {% endif %}
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">API Endpoints</h5>
+                        <ul class="list-unstyled">
+                            <li><code>POST /api/storage/upload/</code> - Загрузка файла</li>
+                            <li><code>GET /api/storage/files/</code> - Список файлов</li>
+                            <li><code>GET /api/storage/download/{id}/</code> - Скачать файл</li>
+                            <li><code>DELETE /api/storage/delete/{id}/</code> - Удалить файл</li>
+                            <li><code>GET /api/storage/logs/</code> - Просмотр логов</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Особенности</h5>
+                        <ul>
+                            <li>Максимальный размер файла: 16MB</li>
+                            <li>Автоматическое разбиение на 16 частей</li>
+                            <li>ZIP архивация каждой части</li>
+                            <li>Проверка целостности (SHA256)</li>
+                            <li>Полное логирование действий</li>
+                            <li>Token-based аутентификация</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

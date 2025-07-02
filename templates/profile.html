@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Профиль - File Storage Service{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2>Профиль пользователя</h2>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Информация об аккаунте</h5>
+                <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+                <p><strong>Email:</strong> {{ user.email|default:"Не указан" }}</p>
+                <p><strong>Дата регистрации:</strong> {{ user.date_joined|date:"d.m.Y H:i" }}</p>
+                <p><strong>Последний вход:</strong> {{ user.last_login|date:"d.m.Y H:i" }}</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">API Token</h5>
+                <p>Для работы с API используйте этот токен в заголовке Authorization:</p>
+                <div class="alert alert-info">
+                    <code>Authorization: Token YOUR_TOKEN_HERE</code>
+                </div>
+                <p class="text-muted">
+                    <small>Токен можно получить через POST запрос на <code>/api/token/</code> с вашими логином и паролем, 
+                    или создать в <a href="/admin/authtoken/tokenproxy/">админ-панели</a>.</small>
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Быстрые ссылки</h5>
+                <div class="d-grid gap-2 d-md-block">
+                    <a href="/api/storage/files/" class="btn btn-primary">Мои файлы (JSON)</a>
+                    <a href="/api/storage/logs/" class="btn btn-secondary">Логи действий (JSON)</a>
+                    <a href="/admin/" class="btn btn-success">Админ-панель</a>
+                    <a href="/api/storage/" class="btn btn-info">API Browser</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Пример использования API</h5>
+                <p>Загрузка файла через curl:</p>
+                <pre class="bg-light p-3 rounded"><code># Получение токена
+curl -X POST http://localhost:8000/api/token/ \
+  -d "username=YOUR_USERNAME&password=YOUR_PASSWORD"
+
+# Загрузка файла
+curl -X POST http://localhost:8000/api/storage/upload/ \
+  -H "Authorization: Token YOUR_TOKEN" \
+  -F "file=@path/to/your/file.txt"
+
+# Список файлов
+curl -H "Authorization: Token YOUR_TOKEN" \
+  http://localhost:8000/api/storage/files/
+
+# Скачивание файла
+curl -H "Authorization: Token YOUR_TOKEN" \
+  http://localhost:8000/api/storage/download/FILE_UUID/ \
+  -o downloaded_file.txt</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
